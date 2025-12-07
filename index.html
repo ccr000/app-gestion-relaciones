@@ -130,57 +130,58 @@
             const [professorPassword, setProfessorPassword] = useState('');
             const [showPasswordInput, setShowPasswordInput] = useState(false);
             
-            // CONTRASEÑA DEL PROFESOR - CÁMBIALA AQUÍ
+            // CONTRASEÑA DEL PROFESOR
             const PROFESSOR_PASSWORD = 'profesor123';
+            
+            // CORRECCIÓN APLICADA AQUÍ: Definición correcta del estado del caso
             const [caseData, setCaseData] = useState({
-    const caseStudy = {
-    title: "Caso: Choque Generacional en Logística Andina",
-    content: `Logística y Distribución Andina S.A. es una empresa tradicional de repuestos con 120 empleados. Ante una oportunidad de venta clave con una minera, surge un conflicto crítico.
+                title: "Caso: Choque Generacional en Logística Andina",
+                content: `Logística y Distribución Andina S.A. es una empresa tradicional de repuestos con 120 empleados. Ante una oportunidad de venta clave con una minera, surge un conflicto crítico.
 
 Roberto, el Gerente Comercial (58 años), insiste en realizar un viaje de tres días para una visita presencial y almuerzo, defendiendo el "trato humano" y la jerarquía. Por otro lado, Camila, la nueva Analista Digital (25 años), propone cancelar el viaje por ineficiente y realizar una demo virtual, basándose en que el cliente es un perfil joven y tecnológico.
 
 La discusión en la junta escala a ofensas personales: Camila tilda los métodos de Roberto de "obsoletos" y Roberto la acusa de "falta de respeto" y arrogancia. El Director General debe intervenir para asegurar la venta y evitar una fractura en el equipo comercial.`
-};
+            });
 
-const [questions] = useState([
-    { 
-        id: 1, 
-        type: 'multiple', 
-        question: '¿Cuál es la raíz principal del conflicto entre Roberto y Camila?', 
-        options: ['Disputa por el presupuesto de viáticos', 'Choque de paradigmas generacionales sobre cómo hacer negocios', 'Competencia por el puesto de Gerente Comercial', 'Falta de herramientas tecnológicas en la empresa'], 
-        correct: 1, 
-        feedback: 'El conflicto no es solo técnico, sino un choque de visiones: Roberto valora la relación personal y la tradición, mientras que Camila prioriza la eficiencia y la digitalización.' 
-    },
-    { 
-        id: 2, 
-        type: 'truefalse', 
-        question: 'Dar la razón completamente a uno de los dos es la estrategia más efectiva para el largo plazo.', 
-        correct: false, 
-        feedback: 'Falso. Validar solo a uno alienaría a la otra parte (fuga de talento joven o desmotivación del senior). La solución ideal debe integrar ambas visiones.' 
-    },
-    { 
-        id: 3, 
-        type: 'short', 
-        question: 'Menciona una técnica de gestión para que ambos empleados aprendan del otro.', 
-        correctAnswers: ['mentoring inverso', 'mentoria inversa', 'mentoría inversa', 'trabajo en pares', 'equipos mixtos'], 
-        feedback: 'El "Mentoring Inverso" es ideal: Camila enseña herramientas digitales a Roberto, y Roberto enseña negociación y habilidades relacionales a Camila.' 
-    },
-    { 
-        id: 4, 
-        type: 'multiple', 
-        question: '¿Qué error de comunicación cometió Camila al presentar su propuesta?', 
-        options: ['No tener los datos a mano', 'Usar un lenguaje técnico incomprensible', 'Invalidar la experiencia de Roberto llamándola "ineficiente" y "vieja"', 'Proponer una solución demasiado costosa'], 
-        correct: 2, 
-        feedback: 'Aunque sus datos eran correctos, Camila falló en las habilidades blandas al atacar la identidad profesional de Roberto en lugar de complementar su propuesta.' 
-    },
-    { 
-        id: 5, 
-        type: 'truefalse', 
-        question: 'En el contexto latinoamericano del caso, el "capital relacional" de Roberto sigue siendo un activo valioso.', 
-        correct: true, 
-        feedback: 'Verdadero. En la cultura de negocios regional, la confianza personal y las redes de contacto (que Roberto posee) siguen siendo determinantes para cerrar grandes contratos.' 
-    }
-]);
+            const [questions] = useState([
+                { 
+                    id: 1, 
+                    type: 'multiple', 
+                    question: '¿Cuál es la raíz principal del conflicto entre Roberto y Camila?', 
+                    options: ['Disputa por el presupuesto de viáticos', 'Choque de paradigmas generacionales sobre cómo hacer negocios', 'Competencia por el puesto de Gerente Comercial', 'Falta de herramientas tecnológicas en la empresa'], 
+                    correct: 1, 
+                    feedback: 'El conflicto no es solo técnico, sino un choque de visiones: Roberto valora la relación personal y la tradición, mientras que Camila prioriza la eficiencia y la digitalización.' 
+                },
+                { 
+                    id: 2, 
+                    type: 'truefalse', 
+                    question: 'Dar la razón completamente a uno de los dos es la estrategia más efectiva para el largo plazo.', 
+                    correct: false, 
+                    feedback: 'Falso. Validar solo a uno alienaría a la otra parte (fuga de talento joven o desmotivación del senior). La solución ideal debe integrar ambas visiones.' 
+                },
+                { 
+                    id: 3, 
+                    type: 'short', 
+                    question: 'Menciona una técnica de gestión para que ambos empleados aprendan del otro.', 
+                    correctAnswers: ['mentoring inverso', 'mentoria inversa', 'mentoría inversa', 'trabajo en pares', 'equipos mixtos'], 
+                    feedback: 'El "Mentoring Inverso" es ideal: Camila enseña herramientas digitales a Roberto, y Roberto enseña negociación y habilidades relacionales a Camila.' 
+                },
+                { 
+                    id: 4, 
+                    type: 'multiple', 
+                    question: '¿Qué error de comunicación cometió Camila al presentar su propuesta?', 
+                    options: ['No tener los datos a mano', 'Usar un lenguaje técnico incomprensible', 'Invalidar la experiencia de Roberto llamándola "ineficiente" y "vieja"', 'Proponer una solución demasiado costosa'], 
+                    correct: 2, 
+                    feedback: 'Aunque sus datos eran correctos, Camila falló en las habilidades blandas al atacar la identidad profesional de Roberto en lugar de complementar su propuesta.' 
+                },
+                { 
+                    id: 5, 
+                    type: 'truefalse', 
+                    question: 'En el contexto latinoamericano del caso, el "capital relacional" de Roberto sigue siendo un activo valioso.', 
+                    correct: true, 
+                    feedback: 'Verdadero. En la cultura de negocios regional, la confianza personal y las redes de contacto (que Roberto posee) siguen siendo determinantes para cerrar grandes contratos.' 
+                }
+            ]);
 
             useEffect(() => {
                 const loadData = async () => {
