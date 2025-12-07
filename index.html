@@ -133,21 +133,54 @@
             // CONTRASEÑA DEL PROFESOR - CÁMBIALA AQUÍ
             const PROFESSOR_PASSWORD = 'profesor123';
             const [caseData, setCaseData] = useState({
-                title: "Caso: Conflicto en el Equipo de Desarrollo",
-                content: `TechSolutions es una empresa de software con 50 empleados. El equipo de desarrollo está dividido: los desarrolladores senior quieren mantener las tecnologías actuales por estabilidad, mientras que los junior proponen migrar a tecnologías más modernas.
+               const caseStudy = {
+    title: "Caso: Choque Generacional en Logística Andina",
+    content: `Logística y Distribución Andina S.A. es una empresa tradicional de repuestos con 120 empleados. Ante una oportunidad de venta clave con una minera, surge un conflicto crítico.
 
-María, la gerente de desarrollo, nota que la productividad ha bajado un 30% en los últimos dos meses. Las reuniones se han vuelto tensas y algunos desarrolladores junior han expresado su intención de renunciar. Los clientes empiezan a quejarse por retrasos en las entregas.
+Roberto, el Gerente Comercial (58 años), insiste en realizar un viaje de tres días para una visita presencial y almuerzo, defendiendo el "trato humano" y la jerarquía. Por otro lado, Camila, la nueva Analista Digital (25 años), propone cancelar el viaje por ineficiente y realizar una demo virtual, basándose en que el cliente es un perfil joven y tecnológico.
 
-María debe tomar una decisión que mantenga al equipo unido y restaure la productividad sin perder talento valioso.`
-            });
+La discusión en la junta escala a ofensas personales: Camila tilda los métodos de Roberto de "obsoletos" y Roberto la acusa de "falta de respeto" y arrogancia. El Director General debe intervenir para asegurar la venta y evitar una fractura en el equipo comercial.`
+};
 
-            const [questions] = useState([
-                { id: 1, type: 'multiple', question: '¿Cuál es el principal problema de gestión que enfrenta María?', options: ['Falta de presupuesto', 'Conflicto generacional y de enfoques técnicos', 'Ausencia de liderazgo', 'Problemas de comunicación con clientes'], correct: 1, feedback: 'El conflicto central es entre dos grupos con diferentes perspectivas sobre la tecnología a usar, reflejando un choque generacional y de filosofías de trabajo.' },
-                { id: 2, type: 'truefalse', question: 'La caída de productividad es un síntoma del problema subyacente de relaciones en el equipo.', correct: true, feedback: 'Correcto. La baja productividad es una consecuencia del conflicto no resuelto entre los miembros del equipo.' },
-                { id: 3, type: 'short', question: 'Menciona UNA estrategia de gestión de conflictos que María podría implementar.', correctAnswers: ['mediación', 'diálogo', 'negociación', 'colaboración', 'facilitación', 'comunicación'], feedback: 'Buenas estrategias incluyen: mediación entre ambos grupos, crear espacios de diálogo, negociación colaborativa, o facilitación de acuerdos que integren ambas perspectivas.' },
-                { id: 4, type: 'multiple', question: '¿Qué stakeholders están siendo afectados por este conflicto?', options: ['Solo los desarrolladores junior', 'Solo María como gerente', 'Desarrolladores, clientes y la empresa en general', 'Únicamente los clientes externos'], correct: 2, feedback: 'El conflicto tiene un impacto múltiple: afecta a ambos grupos de desarrolladores, a los clientes que experimentan retrasos, y a la empresa que pierde productividad y puede perder talento.' },
-                { id: 5, type: 'truefalse', question: 'Ignorar el conflicto y esperar que se resuelva solo es una estrategia viable en este caso.', correct: false, feedback: 'Falso. El conflicto ya ha causado caída de productividad, tensión en reuniones, y riesgo de renuncia de empleados. Ignorarlo solo empeorará la situación.' }
-            ]);
+const [questions] = useState([
+    { 
+        id: 1, 
+        type: 'multiple', 
+        question: '¿Cuál es la raíz principal del conflicto entre Roberto y Camila?', 
+        options: ['Disputa por el presupuesto de viáticos', 'Choque de paradigmas generacionales sobre cómo hacer negocios', 'Competencia por el puesto de Gerente Comercial', 'Falta de herramientas tecnológicas en la empresa'], 
+        correct: 1, 
+        feedback: 'El conflicto no es solo técnico, sino un choque de visiones: Roberto valora la relación personal y la tradición, mientras que Camila prioriza la eficiencia y la digitalización.' 
+    },
+    { 
+        id: 2, 
+        type: 'truefalse', 
+        question: 'Dar la razón completamente a uno de los dos es la estrategia más efectiva para el largo plazo.', 
+        correct: false, 
+        feedback: 'Falso. Validar solo a uno alienaría a la otra parte (fuga de talento joven o desmotivación del senior). La solución ideal debe integrar ambas visiones.' 
+    },
+    { 
+        id: 3, 
+        type: 'short', 
+        question: 'Menciona una técnica de gestión para que ambos empleados aprendan del otro.', 
+        correctAnswers: ['mentoring inverso', 'mentoria inversa', 'mentoría inversa', 'trabajo en pares', 'equipos mixtos'], 
+        feedback: 'El "Mentoring Inverso" es ideal: Camila enseña herramientas digitales a Roberto, y Roberto enseña negociación y habilidades relacionales a Camila.' 
+    },
+    { 
+        id: 4, 
+        type: 'multiple', 
+        question: '¿Qué error de comunicación cometió Camila al presentar su propuesta?', 
+        options: ['No tener los datos a mano', 'Usar un lenguaje técnico incomprensible', 'Invalidar la experiencia de Roberto llamándola "ineficiente" y "vieja"', 'Proponer una solución demasiado costosa'], 
+        correct: 2, 
+        feedback: 'Aunque sus datos eran correctos, Camila falló en las habilidades blandas al atacar la identidad profesional de Roberto en lugar de complementar su propuesta.' 
+    },
+    { 
+        id: 5, 
+        type: 'truefalse', 
+        question: 'En el contexto latinoamericano del caso, el "capital relacional" de Roberto sigue siendo un activo valioso.', 
+        correct: true, 
+        feedback: 'Verdadero. En la cultura de negocios regional, la confianza personal y las redes de contacto (que Roberto posee) siguen siendo determinantes para cerrar grandes contratos.' 
+    }
+]);
 
             useEffect(() => {
                 const loadData = async () => {
