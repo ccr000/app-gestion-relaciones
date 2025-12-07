@@ -4,458 +4,434 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de las Relaciones en las Organizaciones</title>
+    
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+        body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f9fafb; color: #1f2937; }
         .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
         .card { background: white; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 32px; }
-        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 16px; }
-        .btn:hover { transform: scale(1.05); }
-        .btn-primary { background: linear-gradient(135deg, #2563eb, #06b6d4); color: white; }
-        .btn-primary:hover { background: linear-gradient(135deg, #1d4ed8, #0891b2); }
-        .btn-secondary { background: linear-gradient(135deg, #9333ea, #ec4899); color: white; }
-        .btn-secondary:hover { background: linear-gradient(135deg, #7e22ce, #db2777); }
-        .btn-success { background: linear-gradient(135deg, #16a34a, #2563eb); color: white; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; }
+        .btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
+        .btn:active { transform: translateY(0px); }
+        .btn-primary { background: #2563eb; color: white; }
+        .btn-secondary { background: #9333ea; color: white; }
+        .btn-success { background: #16a34a; color: white; }
+        .btn-danger { background: #dc2626; color: white; }
         .btn-gray { background: #6b7280; color: white; }
-        .btn-gray:hover { background: #4b5563; }
-        .btn-green { background: #16a34a; color: white; }
-        .btn-green:hover { background: #15803d; }
-        .btn-blue { background: #2563eb; color: white; }
-        .btn-blue:hover { background: #1d4ed8; }
-        .input { width: 100%; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; }
-        .input:focus { outline: none; border-color: #2563eb; }
-        .textarea { width: 100%; padding: 12px 16px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 16px; resize: vertical; }
-        .textarea:focus { outline: none; border-color: #2563eb; }
-        .login-screen { min-height: 100vh; background: linear-gradient(135deg, #9333ea, #2563eb, #06b6d4); display: flex; align-items: center; justify-content: center; padding: 24px; }
-        .login-card { max-width: 450px; width: 100%; }
-        .title { font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 8px; color: #1f2937; }
-        .subtitle { text-align: center; color: #6b7280; margin-bottom: 32px; }
-        .label { display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px; }
-        .divider { text-align: center; margin: 24px 0; position: relative; }
-        .divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #d1d5db; }
-        .divider span { position: relative; background: white; padding: 0 12px; color: #6b7280; }
-        .screen-bg { min-height: 100vh; background: #f9fafb; padding: 24px; }
+        .btn-outline { background: transparent; border: 2px solid #e5e7eb; color: #374151; }
+        
+        .input, .textarea, .select { width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 15px; margin-bottom: 8px; transition: border 0.2s; }
+        .input:focus, .textarea:focus { outline: none; border-color: #2563eb; }
+        
+        .login-screen { min-height: 100vh; background: linear-gradient(135deg, #4f46e5, #06b6d4); display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .login-card { max-width: 400px; width: 100%; }
+        
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
-        .header-title { font-size: 28px; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 8px; }
-        .button-group { display: flex; gap: 12px; flex-wrap: wrap; }
-        .table { width: 100%; border-collapse: collapse; margin-top: 24px; }
-        .table thead { background: #f3f4f6; }
-        .table th, .table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #e5e7eb; }
-        .table th { font-weight: 600; color: #374151; font-size: 14px; }
-        .table td { color: #1f2937; font-size: 14px; }
-        .table tbody tr:hover { background: #f9fafb; }
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
         .badge-blue { background: #dbeafe; color: #1e40af; }
         .badge-green { background: #dcfce7; color: #166534; }
         .badge-yellow { background: #fef3c7; color: #92400e; }
         .badge-red { background: #fee2e2; color: #991b1b; }
-        .case-box { background: linear-gradient(135deg, #f3e8ff, #dbeafe); padding: 24px; border-radius: 12px; margin-bottom: 32px; }
-        .case-title { font-size: 24px; font-weight: 700; color: #1f2937; margin-bottom: 16px; }
-        .case-content { color: #374151; line-height: 1.75; white-space: pre-line; }
-        .question-box { background: #f9fafb; padding: 24px; border-radius: 12px; border-left: 4px solid #2563eb; margin-bottom: 24px; }
-        .question-text { font-weight: 600; color: #1f2937; margin-bottom: 16px; }
-        .option { display: flex; align-items: center; gap: 12px; padding: 12px; background: white; border-radius: 8px; cursor: pointer; margin-bottom: 8px; }
-        .option:hover { background: #eff6ff; }
-        .radio { width: 16px; height: 16px; }
-        .result-box { background: linear-gradient(135deg, #3b82f6, #9333ea); color: white; padding: 32px; border-radius: 12px; text-align: center; margin-bottom: 32px; }
-        .result-score { font-size: 48px; font-weight: 700; margin-bottom: 8px; }
-        .result-label { font-size: 20px; }
-        .answer-box { padding: 24px; border-radius: 12px; border-left: 4px solid; margin-bottom: 24px; }
-        .answer-correct { background: #f0fdf4; border-color: #16a34a; }
-        .answer-incorrect { background: #fef2f2; border-color: #dc2626; }
-        .answer-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px; gap: 16px; }
-        .answer-status { padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
-        .status-correct { background: #bbf7d0; color: #166534; }
-        .status-incorrect { background: #fecaca; color: #991b1b; }
-        .feedback { color: #6b7280; font-style: italic; margin-top: 8px; }
-        .student-info { margin-bottom: 24px; }
-        .student-label { font-size: 12px; font-weight: 600; color: #9333ea; margin-bottom: 4px; }
-        .student-name { font-size: 18px; font-weight: 700; color: #1f2937; }
-        .section-title { font-size: 20px; font-weight: 700; color: #1f2937; margin-bottom: 16px; }
-        .info-box { background: linear-gradient(135deg, #faf5ff, #eff6ff); padding: 16px; border-radius: 8px; margin-bottom: 24px; }
-        .info-text { color: #1f2937; font-weight: 600; }
-        .note-box { background: #eff6ff; padding: 16px; border-radius: 8px; color: #1e40af; font-size: 14px; }
-        .empty-state { text-align: center; padding: 48px; color: #6b7280; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; }
-        .space-y { display: flex; flex-direction: column; gap: 16px; }
-        .icon { display: inline-flex; vertical-align: middle; }
-        @media (max-width: 768px) {
-            .header { flex-direction: column; align-items: stretch; }
-            .button-group { flex-direction: column; }
-            .table { font-size: 12px; }
-            .answer-header { flex-direction: column; }
-        }
+        
+        .edit-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; margin-bottom: 24px; }
+        .edit-label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 4px; margin-top: 12px; }
+        
+        .question-item { background: white; padding: 16px; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 12px; }
+        .question-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: bold; color: #4b5563; }
+        
+        .case-box { background: #eff6ff; padding: 24px; border-radius: 12px; border-left: 5px solid #2563eb; margin-bottom: 32px; line-height: 1.6; }
+        .result-box { text-align: center; padding: 40px; background: linear-gradient(to right, #4f46e5, #8b5cf6); color: white; border-radius: 16px; margin-bottom: 32px; }
+        
+        .answer-box { padding: 20px; border-radius: 12px; border: 1px solid #e5e7eb; margin-bottom: 16px; background: white; }
+        .correct { border-left: 5px solid #16a34a; background: #f0fdf4; }
+        .incorrect { border-left: 5px solid #dc2626; background: #fef2f2; }
+
+        .table { width: 100%; border-collapse: collapse; }
+        .table th { text-align: left; padding: 12px; background: #f1f5f9; color: #475569; font-size: 14px; }
+        .table td { padding: 12px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+        
+        #error-display { display: none; background: #fee2e2; color: #991b1b; padding: 16px; margin: 16px; border-radius: 8px; border: 1px solid #ef4444; }
     </style>
 </head>
 <body>
+    <div id="error-display"></div>
     <div id="root"></div>
     
     <script type="text/babel">
         const { useState, useEffect } = React;
-        
-        const storage = {
-            async get(key) {
-                try {
-                    const data = localStorage.getItem(key);
-                    return data ? { key, value: data } : null;
-                } catch (e) { return null; }
-            },
-            async set(key, value) {
-                try {
-                    localStorage.setItem(key, value);
-                    return { key, value };
-                } catch (e) { return null; }
-            }
-        };
-        if (!window.storage) window.storage = storage;
 
-        const Download = () => (<svg className="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>);
-        const Edit2 = () => (<svg className="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>);
-        const X = () => (<svg className="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>);
-        const Users = () => (<svg className="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>);
-        const BarChart3 = () => (<svg className="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="9"/><rect x="14" y="8" width="3" height="13"/></svg>);
+        // --- ICONOS ---
+        const IconEdit = () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>;
+        const IconSave = () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>;
+        const IconTrash = () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
+        const IconDownload = () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>;
+        const IconRefresh = () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>;
+
+        // --- DATOS INICIALES (Por defecto) ---
+        const DEFAULT_CASE = {
+            title: "Caso: Choque Generacional en Logística Andina",
+            content: "Logística y Distribución Andina S.A. es una empresa tradicional de repuestos con 120 empleados. Ante una oportunidad de venta clave con una minera, surge un conflicto crítico.\n\nRoberto, el Gerente Comercial (58 años), insiste en realizar un viaje de tres días para una visita presencial y almuerzo, defendiendo el 'trato humano' y la jerarquía. Por otro lado, Camila, la nueva Analista Digital (25 años), propone cancelar el viaje por ineficiente y realizar una demo virtual, basándose en que el cliente es un perfil joven y tecnológico.\n\nLa discusión en la junta escala a ofensas personales: Camila tilda los métodos de Roberto de 'obsoletos' y Roberto la acusa de 'falta de respeto' y arrogancia. El Director General debe intervenir para asegurar la venta y evitar una fractura en el equipo comercial."
+        };
+
+        const DEFAULT_QUESTIONS = [
+            { id: 1, type: 'multiple', question: '¿Cuál es la raíz principal del conflicto entre Roberto y Camila?', options: ['Disputa por el presupuesto de viáticos', 'Choque de paradigmas generacionales sobre cómo hacer negocios', 'Competencia por el puesto de Gerente Comercial', 'Falta de herramientas tecnológicas en la empresa'], correct: 1, feedback: 'El conflicto no es solo técnico, sino un choque de visiones: Roberto valora la relación personal y la tradición, mientras que Camila prioriza la eficiencia y la digitalización.' },
+            { id: 2, type: 'truefalse', question: 'Dar la razón completamente a uno de los dos es la estrategia más efectiva para el largo plazo.', options: [], correct: false, feedback: 'Falso. Validar solo a uno alienaría a la otra parte (fuga de talento joven o desmotivación del senior). La solución ideal debe integrar ambas visiones.' },
+            { id: 3, type: 'short', question: 'Menciona una técnica de gestión para que ambos empleados aprendan del otro.', correctAnswers: ['mentoring inverso', 'mentoria inversa', 'mentoría inversa', 'trabajo en pares'], feedback: 'El "Mentoring Inverso" es ideal: Camila enseña herramientas digitales a Roberto, y Roberto enseña negociación y habilidades relacionales a Camila.' },
+            { id: 4, type: 'multiple', question: '¿Qué error de comunicación cometió Camila al presentar su propuesta?', options: ['No tener los datos a mano', 'Usar un lenguaje técnico incomprensible', 'Invalidar la experiencia de Roberto llamándola "ineficiente" y "vieja"', 'Proponer una solución demasiado costosa'], correct: 2, feedback: 'Aunque sus datos eran correctos, Camila falló en las habilidades blandas al atacar la identidad profesional de Roberto en lugar de complementar su propuesta.' },
+            { id: 5, type: 'truefalse', question: 'En el contexto latinoamericano, el "capital relacional" de Roberto sigue siendo un activo valioso.', options: [], correct: true, feedback: 'Verdadero. En la cultura de negocios regional, la confianza personal y las redes de contacto siguen siendo determinantes.' }
+        ];
 
         const App = () => {
+            // --- ESTADOS ---
             const [view, setView] = useState('login');
+            const [password, setPassword] = useState('');
             const [studentName, setStudentName] = useState('');
             const [currentStudent, setCurrentStudent] = useState(null);
+            
+            // Datos del Caso y Preguntas (Editables)
+            const [caseData, setCaseData] = useState(DEFAULT_CASE);
+            const [questions, setQuestions] = useState(DEFAULT_QUESTIONS);
+            
+            // Lógica del examen
             const [answers, setAnswers] = useState({});
             const [submitted, setSubmitted] = useState(false);
             const [results, setResults] = useState(null);
-            const [editMode, setEditMode] = useState(false);
             const [studentResults, setStudentResults] = useState([]);
-            const [professorPassword, setProfessorPassword] = useState('');
-            const [showPasswordInput, setShowPasswordInput] = useState(false);
             
-            // CONTRASEÑA DEL PROFESOR - CÁMBIALA AQUÍ
+            // Modos Profesor
+            const [editMode, setEditMode] = useState(false);
             const PROFESSOR_PASSWORD = 'profesor123';
-            const [caseData, setCaseData] = useState({
-                title: "Caso: Conflicto en el Equipo de Desarrollo",
-                content: `TechSolutions es una empresa de software con 50 empleados. El equipo de desarrollo está dividido: los desarrolladores senior quieren mantener las tecnologías actuales por estabilidad, mientras que los junior proponen migrar a tecnologías más modernas.
 
-María, la gerente de desarrollo, nota que la productividad ha bajado un 30% en los últimos dos meses. Las reuniones se han vuelto tensas y algunos desarrolladores junior han expresado su intención de renunciar. Los clientes empiezan a quejarse por retrasos en las entregas.
-
-María debe tomar una decisión que mantenga al equipo unido y restaure la productividad sin perder talento valioso.`
-            });
-
-            const [questions] = useState([
-                { id: 1, type: 'multiple', question: '¿Cuál es el principal problema de gestión que enfrenta María?', options: ['Falta de presupuesto', 'Conflicto generacional y de enfoques técnicos', 'Ausencia de liderazgo', 'Problemas de comunicación con clientes'], correct: 1, feedback: 'El conflicto central es entre dos grupos con diferentes perspectivas sobre la tecnología a usar, reflejando un choque generacional y de filosofías de trabajo.' },
-                { id: 2, type: 'truefalse', question: 'La caída de productividad es un síntoma del problema subyacente de relaciones en el equipo.', correct: true, feedback: 'Correcto. La baja productividad es una consecuencia del conflicto no resuelto entre los miembros del equipo.' },
-                { id: 3, type: 'short', question: 'Menciona UNA estrategia de gestión de conflictos que María podría implementar.', correctAnswers: ['mediación', 'diálogo', 'negociación', 'colaboración', 'facilitación', 'comunicación'], feedback: 'Buenas estrategias incluyen: mediación entre ambos grupos, crear espacios de diálogo, negociación colaborativa, o facilitación de acuerdos que integren ambas perspectivas.' },
-                { id: 4, type: 'multiple', question: '¿Qué stakeholders están siendo afectados por este conflicto?', options: ['Solo los desarrolladores junior', 'Solo María como gerente', 'Desarrolladores, clientes y la empresa en general', 'Únicamente los clientes externos'], correct: 2, feedback: 'El conflicto tiene un impacto múltiple: afecta a ambos grupos de desarrolladores, a los clientes que experimentan retrasos, y a la empresa que pierde productividad y puede perder talento.' },
-                { id: 5, type: 'truefalse', question: 'Ignorar el conflicto y esperar que se resuelva solo es una estrategia viable en este caso.', correct: false, feedback: 'Falso. El conflicto ya ha causado caída de productividad, tensión en reuniones, y riesgo de renuncia de empleados. Ignorarlo solo empeorará la situación.' }
-            ]);
-
+            // --- CARGA INICIAL (Persistencia) ---
             useEffect(() => {
-                const loadData = async () => {
+                const loadData = () => {
                     try {
-                        const savedResults = await window.storage.get('student-results');
-                        if (savedResults) setStudentResults(JSON.parse(savedResults.value));
-                    } catch (error) { console.log('No previous results'); }
+                        const savedResults = localStorage.getItem('student-results');
+                        if (savedResults) setStudentResults(JSON.parse(savedResults));
+                        
+                        // Cargar caso editado si existe
+                        const savedCase = localStorage.getItem('custom-case');
+                        if (savedCase) setCaseData(JSON.parse(savedCase));
+                        
+                        // Cargar preguntas editadas si existen
+                        const savedQuestions = localStorage.getItem('custom-questions');
+                        if (savedQuestions) setQuestions(JSON.parse(savedQuestions));
+                        
+                    } catch (e) { console.error('Error cargando datos', e); }
                 };
                 loadData();
             }, []);
 
-            const saveResult = async (studentName, answers, results) => {
-                const newResult = { name: studentName, date: new Date().toISOString(), answers, results };
-                const updatedResults = [...studentResults, newResult];
-                setStudentResults(updatedResults);
-                try {
-                    await window.storage.set('student-results', JSON.stringify(updatedResults));
-                } catch (error) { console.error('Error:', error); }
+            // --- FUNCIONES DE PROFESOR (Edición Avanzada) ---
+            const saveCustomData = () => {
+                localStorage.setItem('custom-case', JSON.stringify(caseData));
+                localStorage.setItem('custom-questions', JSON.stringify(questions));
+                alert('Cambios guardados localmente. Recuerda: Si los alumnos usan sus propios dispositivos, no verán estos cambios.');
+                setEditMode(false);
             };
 
-            const handleLogin = (type) => {
-                if (type === 'student' && !studentName.trim()) {
-                    alert('Por favor ingresa tu nombre');
-                    return;
-                }
-                if (type === 'student') {
-                    setCurrentStudent(studentName);
-                    setView('case');
-                } else if (type === 'professor') {
-                    setShowPasswordInput(true);
-                }
-            };
-            
-            const handleProfessorLogin = () => {
-                if (professorPassword === PROFESSOR_PASSWORD) {
-                    setView('professor');
-                    setProfessorPassword('');
-                    setShowPasswordInput(false);
-                } else {
-                    alert('Contraseña incorrecta');
-                    setProfessorPassword('');
+            const resetToDefault = () => {
+                if(confirm('¿Restaurar caso y preguntas originales? Se borrarán tus ediciones.')) {
+                    setCaseData(DEFAULT_CASE);
+                    setQuestions(DEFAULT_QUESTIONS);
+                    localStorage.removeItem('custom-case');
+                    localStorage.removeItem('custom-questions');
+                    setEditMode(false);
                 }
             };
 
-            const handleAnswerChange = (questionId, value) => {
-                setAnswers({ ...answers, [questionId]: value });
+            const clearAllResults = () => {
+                if(confirm('⛔ PELIGRO: ¿Borrar TODOS los resultados de los estudiantes?')) {
+                    setStudentResults([]);
+                    localStorage.removeItem('student-results');
+                }
             };
 
-            const checkAnswer = (question, userAnswer) => {
-                if (question.type === 'multiple') return userAnswer === question.correct;
-                else if (question.type === 'truefalse') return userAnswer === question.correct;
-                else if (question.type === 'short') {
-                    if (!userAnswer) return false;
-                    const normalizedAnswer = userAnswer.toLowerCase().trim();
-                    return question.correctAnswers.some(correct => normalizedAnswer.includes(correct.toLowerCase()));
+            // Manejadores de edición de preguntas
+            const updateQuestionText = (id, field, value) => {
+                const newQuestions = questions.map(q => q.id === id ? {...q, [field]: value} : q);
+                setQuestions(newQuestions);
+            };
+
+            const updateOption = (qId, optIndex, value) => {
+                const newQuestions = questions.map(q => {
+                    if (q.id === qId) {
+                        const newOptions = [...q.options];
+                        newOptions[optIndex] = value;
+                        return { ...q, options: newOptions };
+                    }
+                    return q;
+                });
+                setQuestions(newQuestions);
+            };
+
+            // --- LÓGICA DE EXAMEN ---
+            const checkAnswer = (q, ans) => {
+                if (q.type === 'multiple' || q.type === 'truefalse') return ans === q.correct;
+                if (q.type === 'short') {
+                    if (!ans) return false;
+                    return q.correctAnswers.some(c => ans.toLowerCase().includes(c.toLowerCase()));
                 }
                 return false;
             };
 
             const handleSubmit = () => {
-                const allAnswered = questions.every(q => answers[q.id] !== undefined && answers[q.id] !== '');
-                if (!allAnswered) {
-                    alert('Por favor responde todas las preguntas antes de enviar');
-                    return;
-                }
-                const calculatedResults = questions.map(q => ({
+                if (questions.some(q => answers[q.id] === undefined || answers[q.id] === '')) return alert('Por favor responde todo.');
+                
+                const calcs = questions.map(q => ({
                     question: q.question,
                     userAnswer: answers[q.id],
                     correct: checkAnswer(q, answers[q.id]),
                     feedback: q.feedback,
-                    correctAnswer: q.type === 'multiple' ? q.options[q.correct] : q.type === 'truefalse' ? (q.correct ? 'Verdadero' : 'Falso') : q.correctAnswers.join(', ')
+                    correctAnswer: q.type === 'multiple' ? q.options[q.correct] : (q.type === 'truefalse' ? (q.correct ? 'Verdadero' : 'Falso') : q.correctAnswers.join(', '))
                 }));
-                setResults(calculatedResults);
+                
+                setResults(calcs);
                 setSubmitted(true);
-                saveResult(currentStudent, answers, calculatedResults);
+                
+                const newRecord = { name: currentStudent, date: new Date().toISOString(), results: calcs };
+                const updatedRecords = [...studentResults, newRecord];
+                setStudentResults(updatedRecords);
+                localStorage.setItem('student-results', JSON.stringify(updatedRecords));
             };
 
-            const exportResults = () => {
+            const exportCSV = () => {
                 const csv = [
-                    ['Nombre', 'Fecha', 'Puntaje', 'Correctas', 'Total'].join(','),
-                    ...studentResults.map(r => {
-                        const correct = r.results.filter(res => res.correct).length;
-                        const total = r.results.length;
-                        const date = new Date(r.date).toLocaleString('es-PE');
-                        return [r.name, date, `${correct}/${total}`, correct, total].join(',');
-                    })
+                    ['Nombre', 'Fecha', 'Correctas', 'Nota'].join(','),
+                    ...studentResults.map(r => [
+                        r.name, 
+                        new Date(r.date).toLocaleTimeString(), 
+                        r.results.filter(x => x.correct).length + '/' + r.results.length,
+                        ((r.results.filter(x => x.correct).length / r.results.length) * 100).toFixed(0) + '%'
+                    ].join(','))
                 ].join('\n');
-                const blob = new Blob([csv], { type: 'text/csv' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'resultados_estudiantes.csv';
-                a.click();
+                const link = document.createElement("a");
+                link.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+                link.download = 'notas_clase.csv';
+                link.click();
             };
 
-            const resetApp = () => {
+            const logout = () => {
                 setView('login');
                 setStudentName('');
-                setCurrentStudent(null);
                 setAnswers({});
                 setSubmitted(false);
                 setResults(null);
-                setProfessorPassword('');
-                setShowPasswordInput(false);
+                setPassword('');
             };
 
+            // --- VISTAS ---
+            
+            // 1. LOGIN
             if (view === 'login') {
                 return (
                     <div className="login-screen">
                         <div className="card login-card">
-                            <h1 className="title">Gestión de las Relaciones en las Organizaciones</h1>
-                            <p className="subtitle">Plataforma de Análisis de Casos</p>
-                            <div className="space-y">
-                                {!showPasswordInput ? (
-                                    <>
-                                        <div>
-                                            <label className="label">Nombre del Estudiante</label>
-                                            <input type="text" value={studentName} onChange={(e) => setStudentName(e.target.value)} placeholder="Ingresa tu nombre completo" className="input" onKeyPress={(e) => e.key === 'Enter' && handleLogin('student')} />
-                                        </div>
-                                        <button onClick={() => handleLogin('student')} className="btn btn-primary" style={{width: '100%'}}>Ingresar como Estudiante</button>
-                                        <div className="divider"><span>o</span></div>
-                                        <button onClick={() => handleLogin('professor')} className="btn btn-secondary" style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'}}><Users /> Vista de Profesor</button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div>
-                                            <label className="label">Contraseña de Profesor</label>
-                                            <input 
-                                                type="password" 
-                                                value={professorPassword} 
-                                                onChange={(e) => setProfessorPassword(e.target.value)} 
-                                                placeholder="Ingresa la contraseña" 
-                                                className="input" 
-                                                onKeyPress={(e) => e.key === 'Enter' && handleProfessorLogin()}
-                                                autoFocus
-                                            />
-                                        </div>
-                                        <button onClick={handleProfessorLogin} className="btn btn-secondary" style={{width: '100%'}}>Acceder</button>
-                                        <button onClick={() => {setShowPasswordInput(false); setProfessorPassword('');}} className="btn btn-gray" style={{width: '100%'}}>Cancelar</button>
-                                    </>
-                                )}
+                            <h2 style={{textAlign:'center', marginBottom:'20px'}}>Acceso al Caso</h2>
+                            <div style={{display:'flex', flexDirection:'column', gap:'10px'}}>
+                                <input className="input" placeholder="Tu nombre completo" value={studentName} onChange={e=>setStudentName(e.target.value)} />
+                                <button className="btn btn-primary" style={{justifyContent:'center'}} onClick={() => { if(studentName) { setCurrentStudent(studentName); setView('case'); } else alert('Pon tu nombre'); }}>Entrar como Estudiante</button>
+                                <hr style={{margin:'15px 0', borderColor:'#e5e7eb'}}/>
+                                <input className="input" type="password" placeholder="Contraseña Profesor" value={password} onChange={e=>setPassword(e.target.value)} />
+                                <button className="btn btn-secondary" style={{justifyContent:'center'}} onClick={() => { if(password===PROFESSOR_PASSWORD) setView('professor'); else alert('Error'); }}>Entrar como Profesor</button>
                             </div>
                         </div>
                     </div>
                 );
             }
 
+            // 2. PROFESOR
             if (view === 'professor') {
                 return (
-                    <div className="screen-bg">
-                        <div className="container">
-                            <div className="card">
-                                <div className="header">
-                                    <h1 className="header-title"><BarChart3 /> Panel de Profesor</h1>
-                                    <div className="button-group">
-                                        <button onClick={() => setEditMode(!editMode)} className={`btn ${editMode ? 'btn-gray' : 'btn-blue'}`} style={{display: 'flex', alignItems: 'center', gap: '8px'}}>{editMode ? <X /> : <Edit2 />}{editMode ? 'Cancelar' : 'Editar'}</button>
-                                        <button onClick={exportResults} className="btn btn-green" disabled={studentResults.length === 0} style={{display: 'flex', alignItems: 'center', gap: '8px'}}><Download /> Exportar</button>
-                                        <button onClick={resetApp} className="btn btn-gray">Salir</button>
+                    <div className="container">
+                        <div className="card">
+                            <div className="header">
+                                <h1>👨‍🏫 Panel de Control</h1>
+                                <div style={{display:'flex', gap:'8px', flexWrap:'wrap'}}>
+                                    <button className="btn btn-gray" onClick={logout}>Salir</button>
+                                    {!editMode && <button className="btn btn-primary" onClick={() => setEditMode(true)}><IconEdit/> Editar Contenido</button>}
+                                    <button className="btn btn-success" onClick={exportCSV}><IconDownload/> Descargar Notas</button>
+                                    <button className="btn btn-danger" onClick={clearAllResults}><IconTrash/> Borrar Datos</button>
+                                </div>
+                            </div>
+
+                            {editMode ? (
+                                <div>
+                                    <div style={{background:'#fff7ed', padding:'15px', border:'1px solid #fdba74', borderRadius:'8px', marginBottom:'20px', color:'#9a3412'}}>
+                                        <strong>Modo Edición:</strong> Puedes modificar el caso y las preguntas. Recuerda hacer clic en "Guardar Cambios" al final.
+                                    </div>
+
+                                    <div className="edit-box">
+                                        <h3>📝 Editar Caso</h3>
+                                        <label className="edit-label">Título</label>
+                                        <input className="input" value={caseData.title} onChange={e => setCaseData({...caseData, title: e.target.value})} />
+                                        <label className="edit-label">Historia</label>
+                                        <textarea className="textarea" rows="8" value={caseData.content} onChange={e => setCaseData({...caseData, content: e.target.value})} />
+                                    </div>
+
+                                    <div className="edit-box">
+                                        <h3>❓ Editar Preguntas</h3>
+                                        {questions.map((q, idx) => (
+                                            <div key={q.id} className="question-item">
+                                                <div className="question-header">Pregunta {idx + 1} ({q.type === 'multiple' ? 'Opción Múltiple' : q.type === 'truefalse' ? 'Verdadero/Falso' : 'Respuesta Corta'})</div>
+                                                
+                                                <label className="edit-label">Enunciado</label>
+                                                <input className="input" value={q.question} onChange={e => updateQuestionText(q.id, 'question', e.target.value)} />
+                                                
+                                                {q.type === 'multiple' && (
+                                                    <div>
+                                                        <label className="edit-label">Opciones (Marca el número de la correcta abajo)</label>
+                                                        {q.options.map((opt, i) => (
+                                                            <input key={i} className="input" value={opt} onChange={e => updateOption(q.id, i, e.target.value)} placeholder={`Opción ${i+1}`} />
+                                                        ))}
+                                                        <label className="edit-label">Respuesta Correcta (0=Opción 1, 1=Opción 2, etc)</label>
+                                                        <input type="number" min="0" max="3" className="input" value={q.correct} onChange={e => updateQuestionText(q.id, 'correct', parseInt(e.target.value))} />
+                                                    </div>
+                                                )}
+
+                                                {q.type === 'truefalse' && (
+                                                    <div>
+                                                        <label className="edit-label">Respuesta Correcta</label>
+                                                        <select className="select" value={q.correct.toString()} onChange={e => updateQuestionText(q.id, 'correct', e.target.value === 'true')}>
+                                                            <option value="true">Verdadero</option>
+                                                            <option value="false">Falso</option>
+                                                        </select>
+                                                    </div>
+                                                )}
+
+                                                <label className="edit-label">Feedback (Explicación para el alumno)</label>
+                                                <textarea className="textarea" rows="2" value={q.feedback} onChange={e => updateQuestionText(q.id, 'feedback', e.target.value)} />
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div style={{display:'flex', gap:'10px', justifyContent:'flex-end'}}>
+                                        <button className="btn btn-outline" onClick={resetToDefault}><IconRefresh/> Restaurar Originales</button>
+                                        <button className="btn btn-gray" onClick={() => setEditMode(false)}>Cancelar</button>
+                                        <button className="btn btn-success" onClick={saveCustomData}><IconSave/> Guardar Cambios</button>
                                     </div>
                                 </div>
-                                {editMode ? (
-                                    <div className="space-y">
-                                        <div>
-                                            <label className="label">Título del Caso</label>
-                                            <input type="text" value={caseData.title} onChange={(e) => setCaseData({...caseData, title: e.target.value})} className="input" />
-                                        </div>
-                                        <div>
-                                            <label className="label">Contenido del Caso</label>
-                                            <textarea value={caseData.content} onChange={(e) => setCaseData({...caseData, content: e.target.value})} rows={10} className="textarea" />
-                                        </div>
-                                        <div className="note-box">💡 <strong>Nota:</strong> Los cambios se aplican inmediatamente.</div>
-                                    </div>
-                                ) : (
-                                    <div className="space-y">
-                                        <div className="info-box">
-                                            <p className="info-text">Total de estudiantes: {studentResults.length}</p>
-                                        </div>
-                                        <div style={{overflowX: 'auto'}}>
+                            ) : (
+                                <div>
+                                    <h3>Resultados ({studentResults.length})</h3>
+                                    {studentResults.length === 0 ? <p style={{color:'#6b7280', padding:'20px'}}>Esperando respuestas...</p> : (
+                                        <div style={{overflowX:'auto'}}>
                                             <table className="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Estudiante</th>
-                                                        <th>Fecha</th>
-                                                        <th style={{textAlign: 'center'}}>Puntaje</th>
-                                                        <th style={{textAlign: 'center'}}>%</th>
-                                                    </tr>
-                                                </thead>
+                                                <thead><tr><th>Alumno</th><th>Fecha</th><th>Nota</th></tr></thead>
                                                 <tbody>
-                                                    {studentResults.map((result, idx) => {
-                                                        const correct = result.results.filter(r => r.correct).length;
-                                                        const total = result.results.length;
-                                                        const percentage = ((correct / total) * 100).toFixed(0);
-                                                        return (
-                                                            <tr key={idx}>
-                                                                <td>{result.name}</td>
-                                                                <td>{new Date(result.date).toLocaleString('es-PE')}</td>
-                                                                <td style={{textAlign: 'center'}}><span className="badge badge-blue">{correct}/{total}</span></td>
-                                                                <td style={{textAlign: 'center'}}><span className={`badge ${percentage >= 70 ? 'badge-green' : percentage >= 50 ? 'badge-yellow' : 'badge-red'}`}>{percentage}%</span></td>
-                                                            </tr>
-                                                        );
-                                                    })}
+                                                    {studentResults.map((r, i) => (
+                                                        <tr key={i}>
+                                                            <td>{r.name}</td>
+                                                            <td>{new Date(r.date).toLocaleTimeString()}</td>
+                                                            <td>
+                                                                <span className={`badge ${r.results.filter(x=>x.correct).length >= 3 ? 'badge-green' : 'badge-red'}`}>
+                                                                    {r.results.filter(x=>x.correct).length}/{r.results.length}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
                                                 </tbody>
                                             </table>
-                                            {studentResults.length === 0 && (<div className="empty-state">No hay resultados registrados aún</div>)}
                                         </div>
-                                    </div>
-                                )}
-                            </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
                 );
             }
 
-            if (view === 'case' && !submitted) {
-                return (
-                    <div className="screen-bg">
+            // 3. ESTUDIANTE (Caso y Examen)
+            if (view === 'case') {
+                if (submitted) {
+                    const corrects = results.filter(r => r.correct).length;
+                    return (
                         <div className="container">
                             <div className="card">
-                                <div className="flex-between" style={{marginBottom: '24px'}}>
-                                    <div className="student-info">
-                                        <div className="student-label">Estudiante</div>
-                                        <div className="student-name">{currentStudent}</div>
-                                    </div>
-                                    <button onClick={resetApp} className="btn btn-gray">Salir</button>
-                                </div>
-                                <div className="case-box">
-                                    <h1 className="case-title">{caseData.title}</h1>
-                                    <p className="case-content">{caseData.content}</p>
-                                </div>
-                                <div className="space-y">
-                                    <h2 className="section-title">Preguntas de Análisis</h2>
-                                    {questions.map((q, idx) => (
-                                        <div key={q.id} className="question-box">
-                                            <p className="question-text">{idx + 1}. {q.question}</p>
-                                            {q.type === 'multiple' && (
-                                                <div className="space-y" style={{gap: '8px'}}>
-                                                    {q.options.map((option, optIdx) => (
-                                                        <label key={optIdx} className="option">
-                                                            <input type="radio" name={`q${q.id}`} value={optIdx} checked={answers[q.id] === optIdx} onChange={(e) => handleAnswerChange(q.id, parseInt(e.target.value))} className="radio" />
-                                                            <span>{option}</span>
-                                                        </label>
-                                                    ))}
-                                                </div>
-                                            )}
-                                            {q.type === 'truefalse' && (
-                                                <div className="space-y" style={{gap: '8px'}}>
-                                                    <label className="option">
-                                                        <input type="radio" name={`q${q.id}`} checked={answers[q.id] === true} onChange={() => handleAnswerChange(q.id, true)} className="radio" />
-                                                        <span>Verdadero</span>
-                                                    </label>
-                                                    <label className="option">
-                                                        <input type="radio" name={`q${q.id}`} checked={answers[q.id] === false} onChange={() => handleAnswerChange(q.id, false)} className="radio" />
-                                                        <span>Falso</span>
-                                                    </label>
-                                                </div>
-                                            )}
-                                            {q.type === 'short' && (
-                                                <textarea value={answers[q.id] || ''} onChange={(e) => handleAnswerChange(q.id, e.target.value)} placeholder="Escribe tu respuesta aquí..." rows={3} className="textarea" />
-                                            )}
-                                        </div>
-                                    ))}
-                                    <button onClick={handleSubmit} className="btn btn-success" style={{width: '100%', padding: '16px'}}>Enviar Respuestas</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-
-            if (submitted && results) {
-                const correctCount = results.filter(r => r.correct).length;
-                const totalCount = results.length;
-                const percentage = ((correctCount / totalCount) * 100).toFixed(0);
-                return (
-                    <div className="screen-bg">
-                        <div className="container">
-                            <div className="card">
-                                <h1 className="title">¡Resultados!</h1>
-                                <p className="subtitle">{currentStudent}</p>
+                                <h1>Resultados: {studentName}</h1>
                                 <div className="result-box">
-                                    <p className="result-score">{correctCount}/{totalCount}</p>
-                                    <p className="result-label">Puntaje Final: {percentage}%</p>
+                                    <div style={{fontSize:'48px', fontWeight:'800'}}>{corrects} / {results.length}</div>
+                                    <div>Respuestas Correctas</div>
                                 </div>
-                                <div className="space-y">
-                                    {results.map((result, idx) => (
-                                        <div key={idx} className={`answer-box ${result.correct ? 'answer-correct' : 'answer-incorrect'}`}>
-                                            <div className="answer-header">
-                                                <p style={{fontWeight: 600, color: '#1f2937', flex: 1}}>{idx + 1}. {result.question}</p>
-                                                <span className={`answer-status ${result.correct ? 'status-correct' : 'status-incorrect'}`}>{result.correct ? '✓ Correcto' : '✗ Incorrecto'}</span>
-                                            </div>
-                                            <div style={{fontSize: '14px'}}>
-                                                <p style={{color: '#374151', marginBottom: '8px'}}><strong>Tu respuesta:</strong> {typeof result.userAnswer === 'boolean' ? (result.userAnswer ? 'Verdadero' : 'Falso') : result.userAnswer}</p>
-                                                {!result.correct && (<p style={{color: '#374151', marginBottom: '8px'}}><strong>Respuesta correcta:</strong> {result.correctAnswer}</p>)}
-                                                <p className="feedback">💡 {result.feedback}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <button onClick={resetApp} className="btn btn-primary" style={{width: '100%', padding: '16px', marginTop: '32px'}}>Finalizar</button>
+                                {results.map((r, i) => (
+                                    <div key={i} className={`answer-box ${r.correct ? 'correct' : 'incorrect'}`}>
+                                        <div style={{fontWeight:'bold', marginBottom:'5px'}}>{i+1}. {r.question}</div>
+                                        <div style={{marginBottom:'5px'}}>Tu respuesta: <strong>{r.userAnswer.toString()}</strong></div>
+                                        {!r.correct && <div style={{color:'#dc2626', marginBottom:'5px'}}>Correcta: {r.correctAnswer}</div>}
+                                        <div style={{fontStyle:'italic', color:'#4b5563', marginTop:'10px'}}>💡 {r.feedback}</div>
+                                    </div>
+                                ))}
+                                <button className="btn btn-primary" style={{width:'100%', justifyContent:'center'}} onClick={logout}>Finalizar</button>
                             </div>
+                        </div>
+                    )
+                }
+                
+                return (
+                    <div className="container">
+                        <div className="card">
+                            <div className="header">
+                                <div>Estudiante: <strong>{studentName}</strong></div>
+                                <button className="btn btn-gray" onClick={logout}>Salir</button>
+                            </div>
+                            
+                            <div className="case-box">
+                                <h2 style={{marginBottom:'15px', color:'#1e40af'}}>{caseData.title}</h2>
+                                <p style={{whiteSpace:'pre-line'}}>{caseData.content}</p>
+                            </div>
+                            
+                            <h3>Preguntas de Análisis</h3>
+                            <br/>
+                            {questions.map((q, i) => (
+                                <div key={q.id} style={{marginBottom:'24px', padding:'15px', border:'1px solid #e5e7eb', borderRadius:'8px'}}>
+                                    <p style={{fontWeight:'600', marginBottom:'10px'}}>{i+1}. {q.question}</p>
+                                    
+                                    {q.type === 'multiple' && (
+                                        <div style={{display:'flex', flexDirection:'column', gap:'8px'}}>
+                                            {q.options.map((opt, idx) => (
+                                                <label key={idx} style={{display:'flex', alignItems:'center', gap:'10px', padding:'8px', background:'#f8fafc', borderRadius:'6px', cursor:'pointer'}}>
+                                                    <input type="radio" name={`q-${q.id}`} onChange={() => setAnswers({...answers, [q.id]: idx})} />
+                                                    {opt}
+                                                </label>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {q.type === 'truefalse' && (
+                                        <div style={{display:'flex', gap:'15px'}}>
+                                            <label style={{display:'flex', alignItems:'center', gap:'5px', cursor:'pointer'}}>
+                                                <input type="radio" name={`q-${q.id}`} onChange={() => setAnswers({...answers, [q.id]: true})} /> Verdadero
+                                            </label>
+                                            <label style={{display:'flex', alignItems:'center', gap:'5px', cursor:'pointer'}}>
+                                                <input type="radio" name={`q-${q.id}`} onChange={() => setAnswers({...answers, [q.id]: false})} /> Falso
+                                            </label>
+                                        </div>
+                                    )}
+
+                                    {q.type === 'short' && (
+                                        <textarea className="textarea" rows="3" placeholder="Escribe tu respuesta aquí..." onChange={e => setAnswers({...answers, [q.id]: e.target.value})}></textarea>
+                                    )}
+                                </div>
+                            ))}
+                            
+                            <button className="btn btn-success" style={{width:'100%', justifyContent:'center', padding:'15px'}} onClick={handleSubmit}>Enviar Respuestas</button>
                         </div>
                     </div>
                 );
             }
-            return null;
         };
 
-        ReactDOM.render(<App />, document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+        
+        window.onerror = function(msg) {
+            document.getElementById('error-display').style.display = 'block';
+            document.getElementById('error-display').innerText = 'Error: ' + msg;
+        }
     </script>
 </body>
 </html>
