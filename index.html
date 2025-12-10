@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión (V3.1 - Editable)</title>
+    <title>Caso DataNova: Gestión Intergeneracional</title>
     
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -65,18 +65,68 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // Datos por defecto (Backup)
+        // --- DATOS DEL NUEVO CASO (DATANOVA) ---
         const DEFAULT_CASE = {
-            title: "Caso: PRUEBA DE CLASE 1",
-            content: "Logística y Distribución Andina S.A. es una empresa tradicional de repuestos con 120 empleados. Ante una oportunidad de venta clave con una minera, surge un conflicto crítico.\n\nRoberto, el Gerente Comercial (58 años), insiste en realizar un viaje de tres días para una visita presencial y almuerzo, defendiendo el 'trato humano' y la jerarquía. Por otro lado, Camila, la nueva Analista Digital (25 años), propone cancelar el viaje por ineficiente y realizar una demo virtual, basándose en que el cliente es un perfil joven y tecnológico.\n\nLa discusión en la junta escala a ofensas personales: Camila tilda los métodos de Roberto de 'obsoletos' y Roberto la acusa de 'falta de respeto' y arrogancia. El Director General debe intervenir para asegurar la venta y evitar una fractura en el equipo comercial."
+            title: "Caso: DataNova y el Proyecto Aurora",
+            content: "DataNova es una empresa latinoamericana de soluciones tecnológicas que ha crecido rápidamente durante los últimos cinco años. Para mantenerse competitiva frente al aumento de startups en la región, la dirección decide lanzar “Aurora”, un servicio de analítica predictiva que integrará datos de distintas industrias. Debido a su complejidad, se conforma un equipo intergeneracional con perfiles complementarios.\n\nEl equipo está formado por:\n- Marta (62 años): Analista senior, metódica y orientada a la documentación.\n- Luis (45 años): Jefe de proyecto, mediador y eficiente.\n- Camila (29 años): UX, ágil y de comunicación informal.\n- Diego (23 años): Programador junior, adaptable pero inexperto en política interna.\n\nDurante la fase inicial del proyecto, la empresa impulsa la modalidad híbrida. Sin embargo, el equipo enfrenta diferentes expectativas generacionales sobre el trabajo. Marta prefiere formalidad y análisis previo. Camila y Diego buscan iteración rápida y canales digitales. Luis intenta conciliar ambos mundos, notando que las tensiones son culturales y no solo técnicas.\n\nA pesar de los roces, cuando logran sincronizarse, el proyecto avanza con fuerza gracias a la reducción de riesgos de Marta, la visión de Luis y la innovación de los jóvenes. El reto es transformar esta diversidad en un activo."
         };
 
+        // --- NUEVAS PREGUNTAS ---
         const DEFAULT_QUESTIONS = [
-            { id: 1, type: 'multiple', question: '¿Cuál es la raíz principal del conflicto entre Roberto y Camila?', options: ['Disputa por el presupuesto de viáticos', 'Choque de paradigmas generacionales', 'Competencia por el puesto de Gerente', 'Falta de herramientas tecnológicas'], correct: 1, feedback: 'El conflicto no es solo técnico, sino un choque de visiones sobre cómo hacer negocios.' },
-            { id: 2, type: 'truefalse', question: 'Redactar un informe explicando las razones del desacuerdo.', options: [], correct: false, feedback: 'Falso. Es necesario enfrentar de manera personal el conflicto personal.' },       
-            { id: 3, type: 'short', question: 'Menciona una técnica para que ambos aprendan del otro.', correctAnswers: ['mentoring inverso', 'mentoria inversa', 'trabajo en pares'], feedback: 'El "Mentoring Inverso" es ideal: Camila enseña tecnología y Roberto enseña negociación.' },
-            { id: 4, type: 'multiple', question: '¿Qué error de comunicación cometió Camila?', options: ['No tener datos', 'Lenguaje técnico', 'Atacar la identidad profesional de Roberto', 'Solución costosa'], correct: 2, feedback: 'Camila falló en las habilidades blandas al atacar personalmente a Roberto.' },
-            { id: 5, type: 'truefalse', question: 'El "capital relacional" de Roberto sigue siendo valioso.', options: [], correct: true, feedback: 'Verdadero. La confianza personal sigue siendo determinante en Latam.' }
+            { 
+                id: 1, 
+                type: 'multiple', 
+                question: '¿Cuál es el principal desafío intergeneracional del caso?', 
+                options: [
+                    'Falta de recursos financieros.',                                       // Índice 0
+                    'Diferencias en ritmos, estilos de comunicación y expectativas.',       // Índice 1 (Correcta)
+                    'Poca preparación técnica de los miembros jóvenes.',                    // Índice 2
+                    'Exceso de supervisión por parte de la gerencia.'                       // Índice 3
+                ], 
+                correct: 1, 
+                feedback: 'El texto menciona explícitamente diferencias en ritmos, percepción de autoridad y formas de comunicar desacuerdos.' 
+            },
+            { 
+                id: 2, 
+                type: 'multiple', 
+                question: '¿Qué oportunidad puede aprovechar el equipo?', 
+                options: [
+                    'La uniformidad en las preferencias laborales.',                        // Índice 0
+                    'La complementariedad entre experiencia profunda y pensamiento innovador.', // Índice 1 (Correcta)
+                    'La posibilidad de delegar todo a la generación más joven.',            // Índice 2
+                    'Reducir las reuniones para evitar conflictos.'                         // Índice 3
+                ], 
+                correct: 1, 
+                feedback: 'El caso destaca que cuando se sincronizan, la experiencia de Marta reduce riesgos y la innovación de Camila/Diego genera valor.' 
+            },
+            { 
+                id: 3, 
+                type: 'multiple', 
+                question: '¿Cuál sería una acción efectiva de liderazgo para Luis?', 
+                options: [
+                    'Permitir que cada generación trabaje por separado.',                   // Índice 0
+                    'Evitar intervenir para que los conflictos se resuelvan solos.',        // Índice 1
+                    'Establecer espacios de alineamiento y métodos híbridos.',              // Índice 2 (Correcta)
+                    'Centralizar todas las decisiones en él.'                               // Índice 3
+                ], 
+                correct: 2, 
+                feedback: 'Luis debe integrar el rigor (Marta) con la agilidad (Camila/Diego) mediante un modelo de gestión híbrido.' 
+            },
+            { 
+                id: 4, 
+                type: 'truefalse', 
+                question: 'V/F: Las tensiones del equipo son exclusivamente consecuencia de la diferencia de edades.', 
+                options: [], 
+                correct: false, 
+                feedback: 'Falso. El caso menciona que las tensiones son también culturales, de estilos de trabajo y percepción de autoridad, no solo biológicas.' 
+            },
+            { 
+                id: 5, 
+                type: 'short', 
+                question: '¿Qué estrategia concreta propondrías para fortalecer la colaboración?', 
+                correctAnswers: ['mentoring', 'mentoría', 'feedback', 'comunicación', 'híbrido', 'integración', 'equipos mixtos', 'alineamiento'], 
+                feedback: 'Estrategias como el mentoring inverso, acuerdos de comunicación o sesiones de alineamiento cultural son respuestas válidas.' 
+            }
         ];
 
         const App = () => {
@@ -255,6 +305,16 @@
                                                         ))}
                                                         <label className="label">Índice Correcta (0=Primera opción)</label>
                                                         <input type="number" className="input" value={q.correct} onChange={e=>updateQ(q.id, 'correct', parseInt(e.target.value))} />
+                                                    </div>
+                                                )}
+
+                                                {q.type === 'truefalse' && (
+                                                    <div>
+                                                        <label className="label">Respuesta Correcta</label>
+                                                        <select className="select" value={q.correct.toString()} onChange={e => updateQ(q.id, 'correct', e.target.value === 'true')}>
+                                                            <option value="true">Verdadero</option>
+                                                            <option value="false">Falso</option>
+                                                        </select>
                                                     </div>
                                                 )}
                                                 
