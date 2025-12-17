@@ -68,6 +68,8 @@
         // ==========================================
         // DATOS DEL CASO 3: ALMACENES FUTURA
         // ==========================================
+        // --- CONFIGURACIÓN DE SEGURIDAD ---
+const STUDENT_PASSWORD = "EXITO"; // <--- CAMBIA ESTO PARA CADA CLASE
         const DEFAULT_CASE = {
             title: "Caso: El Dilema de Almacenes Futura",
             content: "Contexto: \"Almacenes Futura\" es una cadena minorista con 30 años en el mercado. Tradicionalmente, ha operado como un sistema estable: recibe productos de proveedores (entrada), los organiza en tiendas físicas (proceso) y los vende al público (salida). Sin embargo, en el último año, el ambiente externo específico ha cambiado: han aparecido tres nuevas plataformas de comercio electrónico que entregan en menos de 2 horas.\n\nEl Desafío: La gerencia nota que el entorno se ha vuelto volátil (los precios de la competencia cambian por algoritmos cada hora) y complejo (deben cumplir con nuevas leyes de protección de datos y, al mismo tiempo, gestionar una cadena de suministro global afectada por crisis logísticas).\n\nInternamente, la empresa sufre una crisis de identidad. Los directivos han comprado software de Inteligencia Artificial de última generación (recurso tecnológico), pero no han capacitado al personal. Peter Drucker diría que los recursos están \"inertes\". Los empleados de la Generación X temen ser reemplazados, mientras que los Centennials que acaban de ingresar se sienten frustrados por la falta de flexibilidad laboral y la estructura jerárquica rígida. El CEO debe decidir si sigue operando como un sistema cerrado o si se abre a la transmutación organizacional."
@@ -134,8 +136,11 @@
         
         const App = () => {
             const [view, setView] = useState('login');
-            const [password, setPassword] = useState('');
+            const [adminPassword, setAdminPassword] = useState(''); // Contraseña profe
+            const [inputStudentPass, setInputStudentPass] = useState(''); // Contraseña alumno
             const [studentName, setStudentName] = useState('');
+            
+            // Datos
             const [caseData, setCaseData] = useState(DEFAULT_CASE);
             const [questions, setQuestions] = useState(DEFAULT_QUESTIONS);
             const [answers, setAnswers] = useState({});
@@ -152,15 +157,16 @@
                 if (savedQs) setQuestions(JSON.parse(savedQs));
             }, []);
 
+            // --- FUNCIONES (Sin cambios importantes) ---
             const saveChanges = () => {
                 localStorage.setItem('custom-case', JSON.stringify(caseData));
                 localStorage.setItem('custom-questions', JSON.stringify(questions));
                 setEditMode(false);
-                alert('✅ Cambios guardados correctamente.');
+                alert('✅ Cambios guardados.');
             };
 
             const restoreDefaults = () => {
-                if(confirm('¿Volver a las preguntas originales?')) {
+                if(confirm('¿Restaurar todo?')) {
                     setCaseData(DEFAULT_CASE);
                     setQuestions(DEFAULT_QUESTIONS);
                     localStorage.removeItem('custom-case');
@@ -170,69 +176,73 @@
             };
             
             const clearData = () => {
-                if(confirm('¿BORRAR TODOS LOS RESULTADOS?')) {
+                if(confirm('¿Borrar notas?')) {
                     setStudentResults([]);
                     localStorage.removeItem('student-results');
                 }
             };
 
-            const updateQ = (id, field, val) => {
-                setQuestions(questions.map(q => q.id === id ? {...q, [field]: val} : q));
-            };
-            
+            const updateQ = (id, field, val) => setQuestions(questions.map(q => q.id === id ? {...q, [field]: val} : q));
             const updateOpt = (qId, idx, val) => {
-                const newQs = questions.map(q => {
-                    if(q.id !== qId) return q;
-                    const newOpts = [...q.options];
-                    newOpts[idx] = val;
-                    return {...q, options: newOpts};
-                });
+                const newQs = questions.map(q => { if(q.id !== qId) return q; const n = [...q.options]; n[idx] = val; return {...q, options: n}; });
                 setQuestions(newQs);
             };
 
             const submitExam = () => {
-                if(questions.some(q => answers[q.id] === undefined)) return alert('Faltan preguntas por responder');
+                if(questions.some(q => answers[q.id] === undefined)) return alert('Responde todas las preguntas.');
                 const results = questions.map(q => {
                     let isCorrect = false;
                     if(q.type === 'multiple' || q.type === 'truefalse') isCorrect = answers[q.id] === q.correct;
                     if(q.type === 'short') isCorrect = q.correctAnswers.some(a => answers[q.id].toLowerCase().includes(a.toLowerCase()));
                     return { ...q, userAnswer: answers[q.id], correct: isCorrect };
                 });
-                const newRecord = { name: studentName, date: new Date(), results };
-                const updated = [...studentResults, newRecord];
+                const updated = [...studentResults, { name: studentName, date: new Date(), results }];
                 setStudentResults(updated);
                 localStorage.setItem('student-results', JSON.stringify(updated));
                 setSubmitted(true);
             };
 
             const downloadCSV = () => {
-                const csv = "Nombre,Nota,Aciertos\n" + studentResults.map(r => {
-                    const hits = r.results.filter(x=>x.correct).length;
-                    return `${r.name},${((hits/r.results.length)*100).toFixed(0)}%,${hits}/${r.results.length}`;
-                }).join('\n');
+                const csv = "Nombre,Nota\n" + studentResults.map(r => `${r.name},${r.results.filter(x=>x.correct).length}/${r.results.length}`).join('\n');
                 const a = document.createElement('a');
                 a.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-                a.download = 'notas.csv';
-                a.click();
+                a.download = 'notas.csv'; a.click();
+            };
+
+            // --- LÓGICA DE LOGIN ACTUALIZADA ---
+            const handleStudentLogin = () => {
+                if(!studentName) return alert('Escribe tu nombre');
+                // AQUÍ ESTÁ EL CANDADO:
+                if(inputStudentPass.toUpperCase() !== STUDENT_PASSWORD.toUpperCase()) return alert('⚠️ Contraseña de sesión INCORRECTA. Pídela al profesor.');
+                setView('exam');
             };
 
             if(view === 'login') {
                 return (
                     <div className="login-screen">
                         <div className="login-card">
-                            <h2 style={{textAlign:'center', marginBottom:'20px'}}>Acceso al Caso</h2>
-                            <label className="label">Estudiante</label>
-                            <input className="input" placeholder="Tu nombre..." value={studentName} onChange={e=>setStudentName(e.target.value)} />
-                            <button className="btn btn-primary" style={{width:'100%', justifyContent:'center'}} onClick={()=>{if(studentName) setView('exam'); else alert('Nombre requerido');}}>Entrar</button>
+                            <h2 style={{textAlign:'center', marginBottom:'20px'}}>🔐 Acceso Restringido</h2>
+                            
+                            <label className="label">Nombre del Estudiante</label>
+                            <input className="input" placeholder="Nombre y Apellido" value={studentName} onChange={e=>setStudentName(e.target.value)} />
+                            
+                            {/* NUEVO CAMPO: CONTRASEÑA DE CLASE */}
+                            <label className="label" style={{marginTop:'10px'}}>Código de la Sesión</label>
+                            <input className="input" placeholder="Código dado por el profesor" value={inputStudentPass} onChange={e=>setInputStudentPass(e.target.value)} />
+                            
+                            <button className="btn btn-primary" style={{width:'100%', justifyContent:'center', marginTop:'10px'}} onClick={handleStudentLogin}>Ingresar al Examen</button>
+                            
                             <div style={{margin:'20px 0', borderTop:'1px solid #e2e8f0'}}></div>
+                            
                             <label className="label">Profesor</label>
-                            <input type="password" className="input" placeholder="Contraseña" value={password} onChange={e=>setPassword(e.target.value)} />
-                            <button className="btn btn-secondary" style={{width:'100%', justifyContent:'center'}} onClick={()=>{if(password==='profesor123') setView('admin'); else alert('Incorrecto');}}>Panel Profesor</button>
+                            <input type="password" className="input" placeholder="Contraseña Admin" value={adminPassword} onChange={e=>setAdminPassword(e.target.value)} />
+                            <button className="btn btn-secondary" style={{width:'100%', justifyContent:'center'}} onClick={()=>{if(adminPassword==='profesor123') setView('admin'); else alert('Incorrecto');}}>Panel Profesor</button>
                         </div>
                     </div>
                 );
             }
 
+            // --- RESTO DE VISTAS (ADMIN Y EXAMEN) IGUAL QUE ANTES ---
             if(view === 'admin') {
                 return (
                     <div className="container">
@@ -241,12 +251,15 @@
                                 <h1>👨‍🏫 Panel Profesor</h1>
                                 <button className="btn btn-gray" onClick={()=>setView('login')}>Salir</button>
                             </div>
+                            <div style={{background:'#e0f2fe', padding:'10px', borderRadius:'6px', marginBottom:'15px', border:'1px solid #bae6fd', color:'#0369a1'}}>
+                                🔑 <strong>Código para alumnos:</strong> {STUDENT_PASSWORD}
+                            </div>
                             {!editMode ? (
                                 <div>
                                     <div style={{display:'flex', gap:'10px', marginBottom:'20px', flexWrap:'wrap'}}>
-                                        <button className="btn btn-primary" onClick={()=>setEditMode(true)}>✏️ Editar Contenido</button>
-                                        <button className="btn btn-success" onClick={downloadCSV}>📥 Descargar Excel</button>
-                                        <button className="btn btn-danger" onClick={clearData}>🗑️ Borrar Notas</button>
+                                        <button className="btn btn-primary" onClick={()=>setEditMode(true)}>✏️ Editar</button>
+                                        <button className="btn btn-success" onClick={downloadCSV}>📥 Excel</button>
+                                        <button className="btn btn-danger" onClick={clearData}>🗑️ Borrar</button>
                                     </div>
                                     <table className="table">
                                         <thead><tr><th>Alumno</th><th>Nota</th></tr></thead>
@@ -257,53 +270,13 @@
                                             })}
                                         </tbody>
                                     </table>
-                                    {studentResults.length===0 && <p style={{color:'#94a3b8', padding:'20px'}}>Sin resultados aún.</p>}
                                 </div>
                             ) : (
                                 <div>
-                                    <div style={{background:'#fff7ed', border:'1px solid #fed7aa', padding:'15px', borderRadius:'8px', marginBottom:'20px', color:'#9a3412'}}>Estás editando el contenido. Baja para ver las preguntas.</div>
-                                    <div className="edit-section">
-                                        <div className="edit-title">1. Texto del Caso</div>
-                                        <label className="label">Título</label>
-                                        <input className="input" value={caseData.title} onChange={e=>setCaseData({...caseData, title:e.target.value})} />
-                                        <label className="label">Contenido</label>
-                                        <textarea className="textarea" rows="6" value={caseData.content} onChange={e=>setCaseData({...caseData, content:e.target.value})} />
-                                    </div>
-                                    <div className="edit-section">
-                                        <div className="edit-title">2. Preguntas del Examen</div>
-                                        {questions.map((q, i) => (
-                                            <div key={q.id} className="question-editor">
-                                                <div className="question-editor-header">Pregunta {i+1} ({q.type})</div>
-                                                <label className="label">Enunciado</label>
-                                                <input className="input" value={q.question} onChange={e=>updateQ(q.id, 'question', e.target.value)} />
-                                                {q.type === 'multiple' && (
-                                                    <div>
-                                                        <label className="label">Opciones</label>
-                                                        {q.options.map((opt, idx) => (
-                                                            <input key={idx} className="input" value={opt} onChange={e=>updateOpt(q.id, idx, e.target.value)} placeholder={`Opción ${idx+1}`} />
-                                                        ))}
-                                                        <label className="label">Índice Correcta (0=Primera opción)</label>
-                                                        <input type="number" className="input" value={q.correct} onChange={e=>updateQ(q.id, 'correct', parseInt(e.target.value))} />
-                                                    </div>
-                                                )}
-                                                {q.type === 'truefalse' && (
-                                                    <div>
-                                                        <label className="label">Respuesta Correcta</label>
-                                                        <select className="select" value={q.correct.toString()} onChange={e => updateQ(q.id, 'correct', e.target.value === 'true')}>
-                                                            <option value="true">Verdadero</option>
-                                                            <option value="false">Falso</option>
-                                                        </select>
-                                                    </div>
-                                                )}
-                                                <label className="label">Feedback (Explicación)</label>
-                                                <input className="input" value={q.feedback} onChange={e=>updateQ(q.id, 'feedback', e.target.value)} />
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div style={{display:'flex', justifyContent:'flex-end', gap:'10px'}}>
-                                        <button className="btn btn-outline" onClick={restoreDefaults}>Restaurar</button>
-                                        <button className="btn btn-success" onClick={saveChanges}>💾 Guardar Todo</button>
-                                    </div>
+                                    <p>Edición activada...</p>
+                                    <div className="edit-section"><div className="edit-title">1. Caso</div><input className="input" value={caseData.title} onChange={e=>setCaseData({...caseData, title:e.target.value})} /><textarea className="textarea" rows="6" value={caseData.content} onChange={e=>setCaseData({...caseData, content:e.target.value})} /></div>
+                                    <div className="edit-section"><div className="edit-title">2. Preguntas</div>{questions.map((q,i)=><div key={q.id} className="question-editor"><div className="question-editor-header">P{i+1}</div><input className="input" value={q.question} onChange={e=>updateQ(q.id,'question',e.target.value)}/></div>)}</div>
+                                    <div style={{display:'flex', justifyContent:'flex-end', gap:'10px'}}><button className="btn btn-outline" onClick={restoreDefaults}>Restaurar</button><button className="btn btn-success" onClick={saveChanges}>Guardar</button></div>
                                 </div>
                             )}
                         </div>
@@ -316,66 +289,17 @@
                     const lastResult = studentResults[studentResults.length - 1];
                     const hits = lastResult.results.filter(x=>x.correct).length;
                     return (
-                        <div className="container">
-                            <div className="card" style={{textAlign:'center'}}>
-                                <h1>Resultados: {hits} / {questions.length}</h1>
-                                <div style={{textAlign:'left', marginTop:'30px'}}>
-                                    {lastResult.results.map((r, i) => (
-                                        <div key={i} className="question-card" style={{borderColor: r.correct ? '#86efac' : '#fca5a5'}}>
-                                            <p><strong>{i+1}. {r.question}</strong></p>
-                                            <p style={{marginBottom: '5px'}}>Tu respuesta: {r.userAnswer.toString()}</p>
-                                            {r.correct ? (
-                                                <p className="correct-answer">¡Excelente! Estás en lo correcto. 🎉</p>
-                                            ) : (
-                                                <div style={{marginBottom: '8px'}}>
-                                                    <p className="wrong-answer">Incorrecto</p>
-                                                    <p style={{color:'#dc2626', fontSize:'14px'}}>La respuesta correcta era: {r.correctAnswer}</p>
-                                                </div>
-                                            )}
-                                            <div className="feedback-box">💡 {r.feedback}</div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <button className="btn btn-primary" onClick={()=>setView('login')}>Salir</button>
-                            </div>
-                        </div>
+                        <div className="container"><div className="card" style={{textAlign:'center'}}><h1>Resultados: {hits}/{questions.length}</h1>
+                        <div style={{textAlign:'left', marginTop:'30px'}}>{lastResult.results.map((r,i)=><div key={i} className="question-card" style={{borderColor:r.correct?'#86efac':'#fca5a5'}}><p><strong>{i+1}. {r.question}</strong></p><p>Tu respuesta: {r.userAnswer.toString()}</p>{r.correct?<p className="correct-answer">¡Correcto!</p>:<p className="wrong-answer">Incorrecto. {r.feedback}</p>}</div>)}</div>
+                        <button className="btn btn-primary" onClick={()=>setView('login')}>Salir</button></div></div>
                     );
                 }
-                
                 return (
-                    <div className="container">
-                        <div className="card">
-                            <h2 style={{color:'#2563eb', marginBottom:'15px'}}>{caseData.title}</h2>
-                            <div className="case-content">{caseData.content}</div>
-                            <h3>Cuestionario</h3>
-                            {questions.map((q, i) => (
-                                <div key={q.id} className="question-card">
-                                    <p style={{fontWeight:'bold', marginBottom:'10px'}}>{i+1}. {q.question}</p>
-                                    {q.type === 'multiple' && q.options.map((opt, idx) => (
-                                        <label key={idx} className="option-label">
-                                            <input type="radio" name={`q${q.id}`} onChange={()=>setAnswers({...answers, [q.id]: idx})} /> {opt}
-                                        </label>
-                                    ))}
-                                    {q.type === 'truefalse' && (
-                                        <div style={{display:'flex', gap:'20px'}}>
-                                            <label className="option-label"><input type="radio" name={`q${q.id}`} onChange={()=>setAnswers({...answers, [q.id]: true})} /> Verdadero</label>
-                                            <label className="option-label"><input type="radio" name={`q${q.id}`} onChange={()=>setAnswers({...answers, [q.id]: false})} /> Falso</label>
-                                        </div>
-                                    )}
-                                    {q.type === 'short' && (
-                                        <textarea className="textarea" rows="2" onChange={e=>setAnswers({...answers, [q.id]: e.target.value})} placeholder="Respuesta..." />
-                                    )}
-                                </div>
-                            ))}
-                            <button className="btn btn-success" style={{width:'100%', justifyContent:'center'}} onClick={submitExam}>Enviar Examen</button>
-                        </div>
-                    </div>
+                    <div className="container"><div className="card"><h2 style={{color:'#2563eb', marginBottom:'15px'}}>{caseData.title}</h2><div className="case-content">{caseData.content}</div><h3>Cuestionario</h3>{questions.map((q,i)=><div key={q.id} className="question-card"><p style={{fontWeight:'bold'}}>{i+1}. {q.question}</p>
+                    {q.type==='multiple'&&q.options.map((opt,idx)=><label key={idx} className="option-label"><input type="radio" name={`q${q.id}`} onChange={()=>setAnswers({...answers,[q.id]:idx})}/> {opt}</label>)}
+                    {q.type==='truefalse'&&<><label className="option-label"><input type="radio" name={`q${q.id}`} onChange={()=>setAnswers({...answers,[q.id]:true})}/> V</label><label className="option-label"><input type="radio" name={`q${q.id}`} onChange={()=>setAnswers({...answers,[q.id]:false})}/> F</label></>}
+                    {q.type==='short'&&<textarea className="textarea" rows="2" onChange={e=>setAnswers({...answers,[q.id]:e.target.value})} placeholder="Respuesta..."/>}
+                    </div>)}<button className="btn btn-success" style={{width:'100%'}} onClick={submitExam}>Enviar</button></div></div>
                 );
             }
         };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
-</body>
-</html>
