@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuevo Caso de Estudio</title> <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <title>Caso 3: Almacenes Futura</title>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
@@ -12,6 +14,8 @@
         body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f9fafb; color: #1f2937; padding-bottom: 50px; }
         .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
         .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); padding: 30px; }
+        
+        /* Botones */
         .btn { padding: 10px 16px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; transition: all 0.2s; }
         .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
         .btn-primary { background: #2563eb; color: white; }
@@ -20,25 +24,36 @@
         .btn-danger { background: #dc2626; color: white; }
         .btn-gray { background: #6b7280; color: white; }
         .btn-outline { background: white; border: 1px solid #d1d5db; color: #374151; }
+
+        /* Inputs Generales */
         .input, .textarea, .select { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; margin-bottom: 10px; }
         .input:focus, .textarea:focus { outline: 2px solid #2563eb; border-color: transparent; }
         .label { display: block; font-size: 12px; font-weight: 700; color: #4b5563; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Login */
         .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #4f46e5, #0ea5e9); }
         .login-card { background: white; padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+
+        /* Cajas de Edición */
         .edit-section { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
         .edit-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; color: #1e293b; display: flex; align-items: center; gap: 8px; }
         .question-editor { background: white; border: 1px solid #e5e7eb; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
         .question-editor-header { font-weight: bold; margin-bottom: 10px; color: #2563eb; border-bottom: 1px solid #f1f5f9; padding-bottom: 5px; }
+
+        /* Tablas y Resultados */
         .table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .table th { text-align: left; padding: 12px; background: #f1f5f9; color: #64748b; font-size: 13px; font-weight: 700; }
         .table td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
         .badge { padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 700; }
         .badge-green { background: #dcfce7; color: #166534; }
         .badge-red { background: #fee2e2; color: #991b1b; }
+
+        /* Estilo Alumno */
         .case-content { line-height: 1.6; color: #334155; white-space: pre-line; margin-bottom: 30px; padding: 20px; background: #eff6ff; border-radius: 8px; border-left: 4px solid #3b82f6; }
         .question-card { margin-bottom: 20px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; }
         .option-label { display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px; cursor: pointer; transition: background 0.2s; }
         .option-label:hover { background: #f8fafc; }
+        
         .feedback-box { margin-top: 10px; padding: 10px; background: #f8fafc; border-radius: 6px; font-size: 14px; font-style: italic; color: #64748b; }
         .correct-answer { color: #16a34a; font-weight: bold; margin-bottom: 5px; }
         .wrong-answer { color: #dc2626; font-weight: bold; margin-bottom: 5px; }
@@ -51,44 +66,67 @@
         const { useState, useEffect } = React;
 
         // ==========================================
-        // 1. EDITA EL TEXTO DEL CASO AQUÍ ABAJO
+        // DATOS DEL CASO 3: ALMACENES FUTURA
         // ==========================================
         const DEFAULT_CASE = {
-            title: "Caso "El Dilema de Almacenes Futura: Entre el Sistema y el Caos",
-            content: "Almacenes Futura" es una cadena minorista con 30 años en el mercado. Tradicionalmente, ha operado como un sistema estable: recibe productos de proveedores (entrada), los organiza en tiendas físicas (proceso) y los vende al público (salida). Sin embargo, en el último año, el ambiente externo específico ha cambiado: han aparecido tres nuevas plataformas de comercio electrónico que entregan en menos de 2 horas.Escribe aquí la historia completa del caso.\n\nEl Desafío: La gerencia nota que el entorno se ha vuelto volátil (los precios de la competencia cambian por algoritmos cada hora) y complejo (deben cumplir con nuevas leyes de protección de datos y, al mismo tiempo, gestionar una cadena de suministro global afectada por crisis logísticas).\n\nInternamente, la empresa sufre una crisis de identidad. Los directivos han comprado software de Inteligencia Artificial de última generación (recurso tecnológico), pero no han capacitado al personal. Peter Drucker diría que los recursos están "inertes". Los empleados de la Generación X temen ser reemplazados, mientras que los Centennials que acaban de ingresar se sienten frustrados por la falta de flexibilidad laboral y la estructura jerárquica rígida. El CEO debe decidir si sigue operando como un sistema cerrado o si se abre a la transmutación organizacional."
+            title: "Caso: El Dilema de Almacenes Futura",
+            content: "Contexto: \"Almacenes Futura\" es una cadena minorista con 30 años en el mercado. Tradicionalmente, ha operado como un sistema estable: recibe productos de proveedores (entrada), los organiza en tiendas físicas (proceso) y los vende al público (salida). Sin embargo, en el último año, el ambiente externo específico ha cambiado: han aparecido tres nuevas plataformas de comercio electrónico que entregan en menos de 2 horas.\n\nEl Desafío: La gerencia nota que el entorno se ha vuelto volátil (los precios de la competencia cambian por algoritmos cada hora) y complejo (deben cumplir con nuevas leyes de protección de datos y, al mismo tiempo, gestionar una cadena de suministro global afectada por crisis logísticas).\n\nInternamente, la empresa sufre una crisis de identidad. Los directivos han comprado software de Inteligencia Artificial de última generación (recurso tecnológico), pero no han capacitado al personal. Peter Drucker diría que los recursos están \"inertes\". Los empleados de la Generación X temen ser reemplazados, mientras que los Centennials que acaban de ingresar se sienten frustrados por la falta de flexibilidad laboral y la estructura jerárquica rígida. El CEO debe decidir si sigue operando como un sistema cerrado o si se abre a la transmutación organizacional."
         };
 
-        // ==========================================
-        // 2. EDITA LAS PREGUNTAS AQUÍ ABAJO
-        // ==========================================
         const DEFAULT_QUESTIONS = [
             { 
                 id: 1, 
-                type: 'multiple', // Pregunta de Opción Múltiple
-                question: 'Almacenes Futura enfrenta dificultades porque no sabe interpretar si la caída de ventas se debe a la nueva competencia, al cambio de hábitos post-pandemia o a fallos en su propia app' ¿A qué característica de los nuevos entornos se enfrenta aquí?,
+                type: 'multiple', 
+                question: 'Almacenes Futura no sabe si la caída de ventas es por competencia, hábitos o su app. Esta falta de claridad entre causa y efecto se define como:', 
                 options: [
-                    'Opción A (Volatilidad)', 
-                    'Opción B (Incertidumbre)', 
-                    'Opción C (Complejidad)', 
-                    'Opción D (Ambiguedad)',
+                    'Volatilidad',      // Índice 0
+                    'Incertidumbre',    // Índice 1
+                    'Complejidad',      // Índice 2
+                    'Ambigüedad'        // Índice 3 (Correcta)
                 ], 
-                correct: 0, // Pon el número de la opción correcta (3),
-                feedback: 'Justificación: Según lo conversado en clase, la ambigüedad se caracteriza por la falta de claridad sobre el significado de los eventos y la ausencia de una relación clara entre causa y efecto. Al no saber si el problema es la competencia, el cambio de hábitos o fallos técnicos, la empresa opera en un entorno donde las señales son confusas..' 
+                correct: 3, 
+                feedback: 'Correcto: Ambigüedad. Se caracteriza por la falta de claridad sobre el significado de los eventos y la ausencia de una relación clara entre causa y efecto (Entorno VUCA).' 
             },
             { 
                 id: 2, 
-                type: 'truefalse', // Pregunta de Verdadero/Falso
-                question: '¿Escribe aquí la afirmación?', 
-                options: [], 
-                correct: true, // Pon true (Verdadero) o false (Falso)
-                feedback: 'Explica aquí la justificación.' 
+                type: 'multiple', 
+                question: 'Si analizamos a la empresa como un sistema, las nuevas leyes de datos y las quejas de clientes forman parte de:', 
+                options: [
+                    'El Ambiente Externo General y Específico',   // Índice 0 (Correcta)
+                    'El Proceso de Transformación Interno',       // Índice 1
+                    'Los Recursos Materiales e Infraestructura',  // Índice 2
+                    'El Capital Financiero de los Propietarios'   // Índice 3
+                ], 
+                correct: 0, 
+                feedback: 'Las leyes pertenecen al ambiente externo general (político/legal) y las quejas de clientes al ambiente externo específico.' 
             },
             { 
                 id: 3, 
-                type: 'short', // Pregunta Abierta
-                question: '¿Escribe aquí la pregunta abierta?', 
-                correctAnswers: ['palabra1', 'palabra2', 'palabra3'], // Palabras clave aceptadas
-                feedback: 'Posibles respuestas correctas.' 
+                type: 'multiple', 
+                question: 'El CEO compró tecnología pero no capacitó. Según Peter Drucker, ¿cuál es el error principal?', 
+                options: [
+                    'La tecnología es un recurso inanimado que requiere dirección humana.', // Índice 0 (Correcta)
+                    'El capital financiero es el único recurso capaz de generar transmutación.', // Índice 1
+                    'Los empleados de la Generación X son incapaces de adaptarse.',         // Índice 2
+                    'La empresa debería haber ignorado el ambiente externo.'                // Índice 3
+                ], 
+                correct: 0, 
+                feedback: 'Drucker señala que "las organizaciones por sí solas no son nada". La IA es un recurso inerte sin la Dirección Estratégica y el talento humano.' 
+            },
+            { 
+                id: 4, 
+                type: 'truefalse', 
+                question: 'V/F: El modelo Gig Economy sería una solución para las entregas, ya que se basa en empleos temporales facilitados por plataformas.', 
+                options: [], 
+                correct: true, 
+                feedback: 'Verdadero. La Gig Economy se define por empleos temporales o por proyecto, ofreciendo la flexibilidad que el caso sugiere.' 
+            },
+            { 
+                id: 5, 
+                type: 'short', 
+                question: 'Proponga una estrategia (Transmutación Organizacional) que combine Dirección, IA y Factor Humano.', 
+                correctAnswers: ['transmutación', 'reskilling', 'capacitación', 'liderazgo', 'integración', 'flexibilidad', 'talento', 'humano', 'dirección', 'estrategia'], 
+                feedback: 'Tu respuesta debe integrar 3 pilares: 1) IA como recurso, 2) Liderazgo con visión clara, y 3) Reskilling/Flexibilidad para el personal (Gen X y Centennials).' 
             }
         ];
 
