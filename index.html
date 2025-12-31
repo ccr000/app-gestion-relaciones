@@ -3,87 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú de Actividades</title>
+    <title>Gestión de Relaciones - Menú Principal</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: system-ui, -apple-system, sans-serif; 
-            background: linear-gradient(135deg, #f0f9ff, #e0e7ff); 
-            min-height: 100vh; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 20px;
-        }
-        .card { 
-            background: white; 
-            width: 100%; 
-            max-width: 420px; 
-            padding: 40px; 
-            border-radius: 16px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-            text-align: center;
-        }
-        h1 { 
-            color: #1e3a8a; 
-            font-size: 24px; 
-            margin-bottom: 10px; 
-        }
-        p { 
-            color: #64748b; 
-            margin-bottom: 30px; 
-        }
-        .btn { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            width: 100%; 
-            padding: 16px; 
-            margin-bottom: 16px; 
-            border-radius: 10px; 
-            text-decoration: none; 
-            font-weight: 700; 
-            font-size: 16px; 
-            transition: transform 0.2s, box-shadow 0.2s; 
-            border: 1px solid rgba(0,0,0,0.05);
-            color: white; /* Texto blanco para todos */
-        }
-        .btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
-        }
+        body { font-family: system-ui, -apple-system, sans-serif; background: #eef2ff; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 480px; text-align: center; }
+        h1 { color: #1e3a8a; margin-bottom: 10px; font-size: 24px; }
+        p { color: #64748b; margin-bottom: 30px; }
         
-        /* COLORES DE LOS BOTONES */
+        .menu-btn {
+            display: flex; align-items: center; justify-content: flex-start;
+            width: 100%; padding: 16px 24px; margin-bottom: 12px;
+            border: none; border-radius: 12px;
+            font-size: 16px; font-weight: 700; color: white;
+            cursor: pointer; text-decoration: none; transition: transform 0.2s, filter 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .menu-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .icon { margin-right: 15px; font-size: 1.2em; }
+        
         .btn-1 { background: linear-gradient(to right, #2563eb, #3b82f6); } /* Azul */
         .btn-2 { background: linear-gradient(to right, #7c3aed, #8b5cf6); } /* Violeta */
         .btn-3 { background: linear-gradient(to right, #059669, #10b981); } /* Verde */
+        .btn-4 { background: linear-gradient(to right, #ea580c, #f97316); } /* Naranja (NUEVO) */
         
-        .icon { margin-right: 10px; font-size: 18px; }
-        .footer { margin-top: 20px; font-size: 12px; color: #94a3b8; }
+        .footer { margin-top: 30px; font-size: 12px; color: #94a3b8; }
     </style>
 </head>
 <body>
+    <div id="root"></div>
 
-    <div class="card">
-        <h1>Gestión de Relaciones</h1>
-        <p>Selecciona el caso de estudio para hoy:</p>
+    <script type="text/babel">
+        const Menu = () => {
+            // Función para navegar (asume que los archivos están en la misma carpeta)
+            const navigate = (file) => {
+                window.location.href = file;
+            };
 
-        <a href="caso1.html" class="btn btn-1">
-            <span class="icon">👥</span> Caso 1: Roberto y Camila
-        </a>
+            return (
+                <div className="card">
+                    <h1>Gestión de Relaciones</h1>
+                    <p>Selecciona el caso de estudio para hoy:</p>
 
-        <a href="caso2.html" class="btn btn-2">
-            <span class="icon">🚀</span> Caso 2: DataNova (Aurora)
-        </a>
+                    {/* Botón Caso 1 */}
+                    <button className="menu-btn btn-1" onClick={() => navigate('caso1.html')}>
+                        <span className="icon">👥</span> Caso 1: Roberto y Camila
+                    </button>
 
-        <a href="caso3.html" class="btn btn-3">
-            <span class="icon">🏢</span> Caso 3: Almacenes Futura
-        </a>
+                    {/* Botón Caso 2 */}
+                    <button className="menu-btn btn-2" onClick={() => navigate('caso2.html')}>
+                        <span className="icon">🚀</span> Caso 2: DataNova (Aurora)
+                    </button>
 
-        <div class="footer">
-            Universidad / Curso 2025
-        </div>
-    </div>
+                    {/* Botón Caso 3 */}
+                    <button className="menu-btn btn-3" onClick={() => navigate('caso3.html')}>
+                        <span className="icon">🏢</span> Caso 3: Almacenes Futura
+                    </button>
 
+                    {/* Botón Caso 4 (NUEVO) */}
+                    <button className="menu-btn btn-4" onClick={() => navigate('caso4.html')}>
+                        <span className="icon">🎓</span> Caso 4: Evaluación Final
+                    </button>
+
+                    <div className="footer">Universidad / Curso 2025</div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Menu />);
+    </script>
 </body>
 </html>
