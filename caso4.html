@@ -67,7 +67,7 @@
 
         // --- DATOS DEL CASO ---
         const DEFAULT_CASE = {
-            title: "Caso 3: Almacenes Futura - VUCA y Sistemas",
+            title: "Caso 4: Almacenes Futura - VUCA y Sistemas",
             content: "1. EL CONTEXTO (Input)\n'Almacenes Futura' dominó el mercado por 30 años. Su modelo era un 'Sistema Cerrado' perfecto: proveedores fijos, procesos rígidos y ventas masivas.\n\n2. EL QUIEBRE (Entorno VUCA)\nHace 12 meses, competidores digitales rompieron el mercado. La gerencia detecta:\n- Volatilidad: Precios cambian por hora.\n- Ambigüedad: No saben si la caída de ventas es por precio o mala atención.\n\n3. EL CONFLICTO (Caja Negra)\nSe invirtió en IA, pero:\n- La Generación X boicotea el sistema por miedo.\n- Los Centennials renuncian por la rigidez jerárquica.\n\n4. EL DESAFÍO\nEl CEO debe transformar la empresa en un 'Sistema Abierto', integrando la tecnología (Hard) con la cultura (Soft) para sobrevivir."
         };
 
@@ -116,7 +116,7 @@
 
             // Cargar datos
             useEffect(() => {
-                const stored = localStorage.getItem('results_c3_v2');
+                const stored = localStorage.getItem('results_c4');
                 if (stored) setAllResults(JSON.parse(stored));
             }, []);
 
@@ -189,7 +189,7 @@
                 // Guardar localmente
                 const newHistory = [...allResults, finalResult];
                 setAllResults(newHistory);
-                localStorage.setItem('results_c3_v2', JSON.stringify(newHistory));
+                localStorage.setItem('results_c4', JSON.stringify(newHistory));
                 
                 setView('results');
             };
@@ -352,7 +352,7 @@
                                     <h3>📊 Reporte</h3>
                                     <p style={{marginBottom:'10px'}}>Total intentos guardados: <strong>{allResults.length}</strong></p>
                                     <button className="btn btn-success" onClick={downloadCSV}><i className="ri-file-excel-2-line"></i> Descargar Excel (CSV)</button>
-                                    <button className="btn btn-danger" style={{marginLeft:'10px'}} onClick={() => {if(confirm("¿Borrar todo?")) {localStorage.removeItem('results_c3_v2'); setAllResults([]);}}}>Borrar Todo</button>
+                                    <button className="btn btn-danger" style={{marginLeft:'10px'}} onClick={() => {if(confirm("¿Borrar todo?")) {localStorage.removeItem('results_c4'); setAllResults([]);}}}>Borrar Todo</button>
                                 </div>
                                 <div style={{padding:'20px', background:'#fff7ed', borderRadius:'8px'}}>
                                     <h3>🔍 Validador de Códigos</h3>
